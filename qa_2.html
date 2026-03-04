@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question page2</title>
+    <style>
+        @font-face {
+            font-family: 'KakaoBigSans';
+            src: url('element/archive_detail/fonts/kakao-big-sans/KakaoBigSans-Regular.ttf') format('opentype');
+            font-style: normal;
+        }
+        body { 
+            display: flex;
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .ref {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back_elm {
+            position: absolute;
+            width: 85.8vw;
+            height: auto;
+            top: 52.45%;
+            left: 46.7%;
+            transform: translate(-50%, -50%);
+        }
+        .logo {
+            position: absolute;
+            width: 9.4vw;
+            height: auto;
+            top: 17.7%;
+            left: 14.8%;
+            transform: translate(-50%, -50%);
+        }
+        .input {
+            position: absolute;
+            width: 32.3vw;
+            height: auto;
+            top: 50.6%;
+            left: 72.55%;
+            transform: translate(-50%, -50%);
+        }
+        .tree {
+            position: absolute;
+            width: 13.35vw;
+            height: auto;
+            bottom: 5.5%;
+            left: 86.2%;
+            transform: translate(-50%);
+        }
+        .text {
+            position: absolute;
+            width: 14.5vw;
+            height: auto;
+            top: 50.2%;
+            left: 17.35%;
+            transform: translate(-50%, -50%);
+        }
+        .warning {
+            position: absolute;
+            width: 4.4vw;
+            height: auto;
+            top: 16%;
+            left: 86.5%;
+            transform: translate(-50%, -50%);
+        }
+        /* 입력창 스타일 */
+        .input-a1 {
+            position: absolute;
+            top: 49.5%;
+            left: 56.38%;
+            width: 32.37vw;
+            height: 62.2vh;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'KakaoBigSans';
+            color: #6D606B;
+            font-size: 1.03vw;
+            padding: 2.2vw;
+            box-sizing: border-box;
+            line-height: 1.4;
+            resize: none;            /* 크기 조절 비활성화 */
+            overflow-y: auto;        /* 내용이 넘칠 경우 세로 스크롤 */
+            transform: translateY(-50%);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            transform: translateY(-50%);
+        }
+        .input-a1::placeholder {
+            color: #8b8189; /* 연한 회색이나 원하는 색으로 */
+            font-size: 1.03vw;
+            opacity: 1;     /* 투명도 기본값 제거 (브라우저마다 다름) */
+        }
+        .input-a1::-webkit-scrollbar {
+            width: 0.5vw;                /* 스크롤바 전체 너비 */
+        }
+
+        .input-a1::-webkit-scrollbar-track {
+            background: transparent;   /* 트랙 배경 (투명하게) */
+        }
+
+        .input-a1::-webkit-scrollbar-thumb {
+            background-color: rgba(109, 96, 107, 0.4); /* 손잡이 색상 (회보라 반투명) */
+            border-radius: 3px;        /* 둥근 손잡이 */
+        }
+
+        .btn{
+            cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+            transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+        }
+        .before-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;                 
+            left: 6.6%;                   
+            transform: translateX(-50%);
+        }
+
+        .next-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;         
+            left: 93.3%;                  
+            transform: translateX(-50%);
+        }
+        .before-btn:hover,
+        .next-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        /* 경고창 */
+        /* 모달 기본 숨김 */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        /* 경고창 본체 */
+        .alert-box {
+            position: relative;
+            background: linear-gradient(
+                to bottom,
+                #6d606b 0%,     /* 윗부분 색상 */
+                #6d606b 20%,    /* 색상 적용 높이 */
+                #ffffff 15%,    /* 나머지는 흰색 */
+                #ffffff 100%
+            );
+            padding: 3.5vw 3vw 2vw 3vw;
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-family: 'KakaoBigSans';
+            font-size: 1vw;
+        }
+
+        .alert-box button {
+            position:absolute; 
+            top: 0%;
+            right: 5%;
+            transform: translateY(-72%); /* 버튼만 시각적으로 위로 올림 */
+            margin-top: 1.2vw;
+            padding: 0.15vw 0.42vw;
+            background: #E6EDEA;
+            color: #6d606b;
+            font-family: 'KakaoBigSans';
+            font-size: 0.7vw;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img src="element/질문배경_어둡.svg" alt="배경" class="back">
+    <!-- <img src="element/질문 2.png" alt="래퍼" class="ref"> -->
+
+    <img src="element/질문2_배경요소.svg" alt="배경요소" class="back_elm">
+    <img src="element/배경로고_밝.svg" alt="로고" class="logo">
+    <img src="element/입력 박스.svg" alt="입력" class="input">
+    <img src="element/나무.svg" alt="나무" class="tree">
+    <img src="element/언제의 기억인가요.svg" alt="질문" class="text">
+    <img src="element/최대 500자.svg" alt="제한수" class="warning">
+
+    <!-- 입력창 -->
+    <textarea id="answer_q1" class="input-a1" 
+        data-field="q1"
+        placeholder="사용자는 이곳에 작성을 합니다."
+        maxlength="500" 
+        spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+
+
+    <div class="btn">
+        <a href="qa_1.html">
+            <img src="element/위 화살표.svg" alt="이전 버튼" class="before-btn">
+        </a> 
+   
+        <a href="qa_3.html" id="nextBtn">
+            <img src="element/아래 화살표.svg" alt="다음 버튼" class="next-btn">
+        </a> 
+    </div>
+
+    <!-- 경고창 -->
+    <div id="alertModal" class="alert-modal">
+    <div class="alert-box">
+        <p id="alertText">내용을 입력해주세요.</p>
+        <button id="closeAlert">X</button>
+    </div>
+
+    <script src="qa.js" defer></script>
+    <script>
+        const nextBtn    = document.getElementById('nextBtn');
+        const alertModal = document.getElementById('alertModal');
+        const alertText  = document.getElementById('alertText');
+        const closeAlert = document.getElementById('closeAlert');
+
+        // 이 페이지의 입력요소들 중 '무언가라도' 입력됐는지 체크
+        function hasAnyInput() {
+            const fields = Array.from(
+                document.querySelectorAll('textarea, input[type="text"], input[type="email"], input[type="number"]')
+            );
+            return fields.some(el => (el.value || '').trim().length > 0);
+        }
+
+        // 다음 버튼 클릭 시 검증
+        nextBtn.addEventListener('click', (e) => {
+            if (!hasAnyInput()) {           // 아무 것도 안 적었으면
+                e.preventDefault();           // 이동 막기
+                alertText.textContent = '내용을 입력해주세요.';  // 메시지 변경 가능
+                alertModal.style.display = 'flex';
+            }
+            // 무언가라도 적혀 있으면 기본 href로 이동(qa_3.html)
+        });
+
+        // 모달 닫기
+        closeAlert.addEventListener('click', () => {
+            alertModal.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

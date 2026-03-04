@@ -1,0 +1,140 @@
+body {
+  display: flex;
+  margin: 0;
+  width: 100vw;
+  height: auto;
+  position: relative;
+  overflow-x: hidden; /* 가로 스크롤만 방지 */
+}
+
+.ref {
+  display: block;        /* img 기본 여백 제거 */
+  width: 100vw;            /* 화면 너비에 맞게 */
+  height: auto;
+  object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+  z-index: -1;             /* 다른 요소 뒤로 */
+}
+
+.back {
+  display: block;        /* img 기본 여백 제거 */
+  width: 100vw;            /* 화면 너비에 맞게 */
+  height: auto;
+  object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+  z-index: -1;             /* 다른 요소 뒤로 */
+}
+
+.gradient {
+  position: absolute;
+  width: 100vw;
+  height: auto;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 0;
+}
+
+.sub-back {
+  position: absolute;
+  width: 92.3vw;
+  height: auto;
+  top: 34.79%;
+  left: 46.2%;
+  transform: translate(-50%, -50%);
+}
+
+.azit-box {
+  position: absolute;
+  width: 25.5vw;
+  height: auto;
+  top: 8.38%;
+  left: 79%;
+  transform: translate(-50%, -50%);
+}
+
+.story-box {
+  position: absolute;
+  width: 25.3vw;
+  height: auto;
+  bottom: 23.4%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.txt {
+  position: absolute;
+  width: 53.8vw;
+  height: auto;
+  bottom: 0.25%;
+  left: 49.9%;
+  transform: translate(-50%, -40%); 
+}
+
+.start {
+  position: absolute;
+  width: 7.4vw;
+  height: auto;
+  bottom: 1.9%;
+  left: 86.4%;
+  transform: translate(-50%, -50%); 
+}
+
+.btn{
+  cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+  transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+}
+
+.before-btn {
+  position: absolute;
+  width: 6.7vw;
+  height: auto;
+  top: 2.2%;                 
+  left: 6.6%;                   
+  transform: translateX(-50%);
+    
+}
+
+.next-btn {
+  position: absolute;
+  width: 6.7vw;
+  height: auto;
+  bottom: 1.4%;         
+  left: 93.3%;                  
+  transform: translateX(-50%);
+}
+
+
+/* hover 시 살짝 커지는 효과 */
+.before-btn:hover,
+.next-btn:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+/* ===== Global Scrollbar Style (메인 페이지 전체) ===== */
+
+/* Chrome / Edge / Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 10px;                         /* 폭 조금 넉넉하게 */
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);     /* 아주 옅은 회색 (트랙) */
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: rgba(109, 96, 107, 0.55); /* 진한 회보라 계열 */
+    border-radius: 999px;                 /* 동글동글 */
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(109, 96, 107, 0.8);  /* hover 시 더 진하게 */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(109, 96, 107, 0.55) rgba(0,0,0,0.03);
+}

@@ -1,0 +1,71 @@
+body {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.back {
+  position: fixed;         /* 스크롤해도 고정 */
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;            /* 화면 너비에 맞게 */
+  height: 100vh;           /* 화면 높이에 맞게 */
+  object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+  z-index: -1;             /* 다른 요소 뒤로 */
+}
+.ref {
+  display: block;        /* img 기본 여백 제거 */
+  width: 100vw;            /* 화면 너비에 맞게 */
+  height: auto;
+  object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+  z-index: -1;             /* 다른 요소 뒤로 */
+        }
+
+.logo {
+  position: absolute;
+  width: 18.3vw;
+  height: auto;
+  top: 24.3%;
+  left: 50.2%;
+  transform: translate(-50%, -50%);
+}
+
+.sub {
+  position: absolute;
+  width: 68.5vw;
+  height: auto;
+  top: 21.8%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.name {
+  position: absolute;  
+  width: 27.6vw;
+  height: auto;
+  bottom: 8.1%;
+  left: 50.03%;
+  transform: translate(-50%, -50%);
+}
+
+.next-btn {
+  position: absolute;
+  width: 6.6vw;
+  height: auto;
+  bottom: 15.65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+  transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+}
+
+/* hover 시 살짝 커지는 효과 */
+.next-btn:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+

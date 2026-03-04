@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question page5</title>
+    <style>
+        @font-face {
+            font-family: 'KakaoBigSans';
+            src: url('element/archive_detail/fonts/kakao-big-sans/KakaoBigSans-Regular.ttf') format('opentype');
+            font-style: normal;
+        }
+        body { 
+            display: flex;
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .ref {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back_elm {
+            position: absolute;
+            width: 77.3vw;
+            height: auto;
+            top: 48.9%;
+            left: 50.9%;
+            transform: translate(-50%, -50%);
+        }
+        .logo {
+            position: absolute;
+            width: 9.4vw;
+            height: auto;
+            top: 19.4%;
+            left: 14.8%;
+            transform: translate(-50%, -50%);
+        }
+        .text {
+            position: absolute;
+            width: 14.6vw;
+            height: auto;
+            top: 50.2%;
+            left: 17.5%;
+            transform: translate(-50%, -50%);
+        }
+        .score {
+            position: absolute;
+            width: 78vw;
+            height: auto;
+            top: 55%;         
+            left: 51%;                  
+            transform: translateX(-50%);
+        }
+
+        .btn{
+            cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+            transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+        }
+        .next-btn {
+            position: absolute;
+            width: 20.25vw;
+            height: auto;
+            bottom: 3.53%;         
+            left: 86.85%;                  
+            transform: translateX(-50%);
+        }
+        .before-btn:hover,
+        .next-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+
+    </style>
+</head>
+<body>
+    <img src="element/질문배경_어둡.svg" alt="배경" class="back">
+    <!-- <img src="element/질문 5.png" alt="래퍼" class="ref"> -->
+
+    <img src="element/질문5_배경요소.svg" alt="배경요소" class="back_elm">
+    <img src="element/배경로고_밝.svg" alt="로고" class="logo">
+    <img src="element/다 만들어 졌어요 ^^.svg" alt="완성글귀" class="text">
+    <img src="element/archive_detail/악보1.svg" alt="악보" class="score">
+
+
+    <div class="btn">
+        <a href="archive.html" id="toArchiveBtn">
+            <img src="element/아카이빙 페이지 버튼.svg" alt="다음 버튼" class="next-btn">
+        </a> 
+    </div>
+    
+
+    <script src="qa.js"></script>
+    <script>
+        const archiveBtn = document.getElementById('toArchiveBtn');
+
+        archiveBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // 기본 링크 이동 막고
+            FormState.clear();      // 1) 임시 저장 전부 제거
+
+            // 2) (선택) 브라우저 뒤로가기 캐시 방지
+            if ('navigation' in window && 'reload' in window.location) {
+                history.replaceState({}, '', location.href);
+            }
+
+            // 3) 아카이빙 페이지로 이동
+            location.href = 'archive.html';
+        });
+    </script>
+</body>
+</html>

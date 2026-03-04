@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question page1</title>
+    <style>
+        @font-face {
+            font-family: 'KakaoBigSans';
+            src: url('element/archive_detail/fonts/kakao-big-sans/KakaoBigSans-Regular.ttf') format('opentype');
+            font-style: normal;
+        }
+        body { 
+            display: flex;
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .ref {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+
+        .logo {
+            position: absolute;
+            width: 9.4vw;
+            height: auto;
+            top: 19.4%;
+            left: 14.8%;
+            transform: translate(-50%, -50%);
+        }
+        .who {
+            position: absolute;
+            width: 79.9vw;
+            height: auto;
+            top: 44.8%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .email {
+            position: absolute;
+            width: 79.9vw;
+            height: auto;
+            bottom: 22.7%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        input::placeholder {
+        color: #8b8189; /* 연한 회색이나 원하는 색으로 */
+        opacity: 1;     /* 투명도 기본값 제거 (브라우저마다 다름) */
+        }
+        /* 입력창 스타일 */
+        .input-who,
+        .input-email {
+            position: absolute;
+            left: 11%;
+            width: 78vw;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'KakaoBigSans';
+            color: #E6EDEA;
+            font-size: 1.2vw;
+            padding-left: 1vw;
+            padding-right: 1vw;
+            box-sizing: border-box;
+            
+        }
+
+        /* 이미지 위 정확히 정렬 */
+        .input-who {
+        top: 47.3%;
+        transform: translateY(-50%);
+        }
+        .input-email {
+            top: 69%;
+            transform: translateY(-50%);
+        }
+        
+        .btn{
+            cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+            transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+        }
+        .before-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;                 
+            left: 6.6%;                   
+            transform: translateX(-50%);
+        }
+
+        .next-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;         
+            left: 93.3%;                  
+            transform: translateX(-50%);
+        }
+        .before-btn:hover,
+        .next-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        /* 경고창 */
+        /* 모달 기본 숨김 */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        /* 경고창 본체 */
+        .alert-box {
+            position: relative;
+            background: linear-gradient(
+                to bottom,
+                #6d606b 0%,     /* 윗부분 색상 */
+                #6d606b 20%,    /* 색상 적용 높이 */
+                #ffffff 15%,    /* 나머지는 흰색 */
+                #ffffff 100%
+            );
+            padding: 3.5vw 3vw 2vw 3vw;
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-family: 'KakaoBigSans';
+            font-size: 1vw;
+        }
+
+        .alert-box button {
+            position:absolute; 
+            top: 0%;
+            right: 5%;
+            transform: translateY(-72%); /* 버튼만 시각적으로 위로 올림 */
+            margin-top: 1.2vw;
+            padding: 0.15vw 0.42vw;
+            background: #E6EDEA;
+            color: #6d606b;
+            font-family: 'KakaoBigSans';
+            font-size: 0.7vw;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <img src="element/질문1 배경.svg" alt="배경" class="back">
+    <!-- <img src="element/질문 1.png" alt="래퍼" class="ref"> -->
+
+    <img src="element/배경로고.svg" alt="로고" class="logo">
+    <img src="element/ㄴㄱ.svg" alt="누구" class="who">
+    <img src="element/ㅇㅁㅇ.svg" alt="이메일" class="email">
+    <!-- 입력창 -->
+    <input type="text" id="nameInput" class="input-who" 
+        data-field="name"
+        placeholder="이름(닉네임)을 입력하세요" 
+        spellcheck="false" autocorrect="off" autocapitalize="off">
+    <input type="email" id="emailInput" class="input-email" 
+        data-field="email"
+        placeholder="이메일 주소를 입력하세요" 
+        spellcheck="false" autocorrect="off" autocapitalize="off">
+
+    <div class="btn">
+        <a href="QA.html" id="prevResetBtn">
+            <img src="element/위 화살표.svg" alt="이전 버튼" class="before-btn">
+        </a> 
+   
+        <a href="qa_2.html" id="nextBtn">
+            <img src="element/아래 화살표.svg" alt="다음 버튼" class="next-btn">
+        </a> 
+    </div>
+        
+    <!-- 경고창 -->
+    <div id="alertModal" class="alert-modal">
+    <div class="alert-box">
+        <p id="alertText">이름(닉네임)은 필수로 입력해야 합니다.</p>
+        <button id="closeAlert">X</button>
+    </div>
+</div>
+
+    <script src="qa.js"></script>
+    <script type="module">
+        import { createUser } from './api.js';
+
+        const prev = document.getElementById('prevResetBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const alertModal = document.getElementById('alertModal');
+        const alertText = document.getElementById('alertText');
+        const closeAlert = document.getElementById('closeAlert');
+        const openAlert  = (msg) => {
+            alertText.innerHTML = msg;
+            alertModal.style.display = 'flex';
+        };
+        closeAlert?.addEventListener('click', () => alertModal.style.display = 'none');
+        alertModal?.addEventListener('click', (e) => { if (e.target === alertModal) alertModal.style.display='none'; });
+
+        if (prev) {
+            prev.addEventListener('click', (e) => {
+                e.preventDefault();                 // 기본 이동 막고
+                if (window.FormState?.clear) FormState.clear();
+                else localStorage.removeItem('qaForm:v1');
+                // 개별 키도 쓰고 있었다면 함께 제거(선택)
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                // 뒤로가기로 다시 봤을 때 캐시된 값이 보이지 않도록
+                history.replaceState({}, '', location.href);
+                // 원하는 첫 화면으로 이동
+                location.href = 'QA.html';
+            });
+        }   
+
+        // (선택) localStorage가 비어 있으면 폼 즉시 초기화
+        window.addEventListener('pageshow', () => {
+            if (!localStorage.getItem('qaForm:v1')) {
+                document.querySelectorAll('[data-field]').forEach(el => {
+                    if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+                    else el.value = '';
+                });
+            }
+        });
+
+        // 다음 버튼
+        nextBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const name  = (document.getElementById('nameInput')?.value || '').trim();
+            const raw   = (document.getElementById('emailInput')?.value || '');
+            const email = raw.trim().normalize('NFKC'); // 전각 → 반각 정규화
+
+            const asciiOk = /^[\x00-\x7F]*$/.test(email); // 빈칸 허용
+            const emailOk = email === '' || /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+
+            if (!name)      return openAlert('이름(닉네임)은 필수로 입력해야 합니다.');
+            if (!asciiOk || !emailOk) return openAlert('올바른 이메일 주소를 입력해주세요.');
+
+            try {
+                nextBtn.style.pointerEvents = 'none';
+                // 백엔드로 전송 → userId 수신
+                const resp = await createUser({ nickName: name, email });
+                // 👉 디버깅용 로그들 추가
+                console.log('createUser resp (typeof):', typeof resp);
+                console.log('createUser resp (raw):', resp);
+                console.log('createUser resp.userId:', resp && resp.userId);
+
+                const userId =
+                    resp?.userId ??
+                    resp?.id ??
+                    resp?.data?.userId ??
+                    resp?.data?.id;       // ← 진짜 값 여기 있음!!
+
+                if (!userId) {
+                    console.error('userId not found:', resp);
+                    throw new Error('userId missing');
+                }
+
+
+                // 상태 저장 (qa.js 사용 중이면 이 방법 추천)
+                if (window.FormState?.setState) {
+                    FormState.setState({ userId, name, email });
+                } else {
+                    // qa.js 안 쓸 때 대비(개별 키)
+                    localStorage.setItem('userId', userId);
+                    localStorage.setItem('userName', name);
+                    localStorage.setItem('userEmail', email);
+                }
+
+                // ✅ 다음 페이지 이동
+                location.href = 'qa_2.html';
+                } catch (err) {
+                    console.error(err);
+                    openAlert('사용자 등록 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.');
+                    nextBtn.style.pointerEvents = 'auto';
+                }
+            });
+    </script>
+</body>
+</html>

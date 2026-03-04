@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question page4</title>
+    <style>
+        @font-face {
+            font-family: 'KakaoBigSans';
+            src: url('element/archive_detail/fonts/kakao-big-sans/KakaoBigSans-Regular.ttf') format('opentype');
+            font-style: normal;
+        }
+         body { 
+            display: flex;
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .ref {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        .back_elm {
+            position: absolute;
+            width: 89vw;
+            height: auto;
+            top: 53.55%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+        }
+        .logo {
+            position: absolute;
+            width: 9.4vw;
+            height: auto;
+            top: 17.7%;
+            left: 14.8%;
+            transform: translate(-50%, -50%);
+        }
+        .input {
+            position: absolute;
+            width: 32.3vw;
+            height: auto;
+            top: 50.6%;
+            left: 72.55%;
+            transform: translate(-50%, -50%);
+        }
+        .hand {
+            position: absolute;
+            width: 9.7vw;
+            height: auto;
+            bottom: 7.8%;
+            left: 57%;
+            transform: translate(-50%);
+        }
+        .circle {
+            position: absolute;
+            width: 5vw;
+            height: auto;
+            top: 40%;
+            left: 12.85%;
+            transform: translate(-50%, -50%);
+        }
+        .text {
+            position: absolute;
+            width: 38.3vw;
+            height: auto;
+            top: 50.28%;
+            left: 29.24%;
+            transform: translate(-50%, -50%);
+        }
+        .warning {
+            position: absolute;
+            width: 4.4vw;
+            height: auto;
+            top: 16%;
+            left: 86.5%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 입력창 스타일 */
+        .input-a3 {
+            position: absolute;
+            top: 49.5%;
+            left: 56.38%;
+            width: 32.37vw;
+            height: 62.2vh;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'KakaoBigSans';
+            color: #6D606B;
+            font-size: 1.03vw;
+            padding: 2.15vw;
+            box-sizing: border-box;
+            line-height: 1.4;
+            resize: none;            /* 크기 조절 비활성화 */
+            overflow-y: auto;        /* 내용이 넘칠 경우 세로 스크롤 */
+            transform: translateY(-50%);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            transform: translateY(-50%);
+        }
+        .input-a3::placeholder {
+            color: #8b8189; /* 연한 회색이나 원하는 색으로 */
+            font-size: 1.03vw;
+            opacity: 1;     /* 투명도 기본값 제거 (브라우저마다 다름) */
+        }
+        .input-a3::-webkit-scrollbar {
+            width: 0.6vw;                /* 스크롤바 전체 너비 */
+        }
+
+        .input-a3::-webkit-scrollbar-track {
+            background: transparent;   /* 트랙 배경 (투명하게) */
+        }
+
+        .input-a3::-webkit-scrollbar-thumb {
+            background-color: rgba(109, 96, 107, 0.4); /* 손잡이 색상 (회보라 반투명) */
+            border-radius: 3px;        /* 둥근 손잡이 */
+        }
+
+        .btn{
+            cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+            transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+        }
+        .before-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;                 
+            left: 6.6%;                   
+            transform: translateX(-50%);
+        }
+
+        .next-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            bottom: 3.4%;         
+            left: 93.3%;                  
+            transform: translateX(-50%);
+        }
+        .before-btn:hover,
+        .next-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+        .result {
+            position: absolute;
+            width: 8vw;
+            height: auto;
+            bottom: 1.5%;
+            left: 85%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* 경고창 */
+        /* 모달 기본 숨김 */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        /* 경고창 본체 */
+        .alert-box {
+            position: relative;
+            background: linear-gradient(
+                to bottom,
+                #6d606b 0%,     /* 윗부분 색상 */
+                #6d606b 20%,    /* 색상 적용 높이 */
+                #ffffff 15%,    /* 나머지는 흰색 */
+                #ffffff 100%
+            );
+            padding: 3.5vw 3vw 2vw 3vw;
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            font-family: 'KakaoBigSans';
+            font-size: 1vw;
+        }
+        .alert-box p {
+            white-space: pre-line; /* \n을 줄바꿈으로 인식 */
+        }
+
+        .alert-box button {
+            position:absolute; 
+            top: 0%;
+            right: 5%;
+            transform: translateY(-72%); /* 버튼만 시각적으로 위로 올림 */
+            margin-top: 1.2vw;
+            padding: 0.15vw 0.42vw;
+            background: #E6EDEA;
+            color: #6d606b;
+            font-family: 'KakaoBigSans';
+            font-size: 0.7vw;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* ===== 로딩 오버레이 ===== */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;              /* 기본은 숨김 */
+            justify-content: center;
+            align-items: center;
+            z-index: 998;               /* alert-modal(999) 바로 아래 or 위로 조절 가능 */
+            font-family: 'KakaoBigSans';
+        }
+        .loading-box {
+            background: #E6EDEA;
+            padding: 1.5vw 3vw;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            /* ✅ 여기부터 추가/수정 */
+            display: flex;              /* flex 켜기 */
+            flex-direction: column;     /* 위아래로 배치 (동그라미 위, 글자 아래) */
+            align-items: center;        /* 가로 중앙 정렬 */
+            justify-content: center;    /* 세로 중앙 정렬 */
+
+            text-align: center;
+        }
+        .loading-text {
+            font-size: 1vw;
+            color: #6d606b;
+            margin-top: 1vw;
+        }
+        .loading-spinner {
+            width: 2.1vw;
+            height: 2.1vw;
+            border-radius: 50%;
+            border: 0.35vw solid #c1c8c5;
+            border-top-color: #6d606b;
+            animation: spin 0.8s linear infinite;
+            transform-origin: center;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- 1. Firebase SDK 불러오기 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+      // 2. Firebase 초기화 (★ config는 콘솔에서 복붙) 
+      const firebaseConfig = {
+        apiKey: "AIzaSyCQvpzaVBrkdy6ZFe9BAgRpOwNAjTYL6Zo",
+        authDomain: "a-zit-2ca71.firebaseapp.com",
+        projectId: "a-zit-2ca71",
+        storageBucket: "a-zit-2ca71.firebasestorage.app",
+        messagingSenderId: "908182478309",
+        appId: "1:908182478309:web:f0e494ad1cb50a1053230c"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <img src="element/질문배경_어둡.svg" alt="배경" class="back">
+    <!-- <img src="element/질문 4.png" alt="래퍼" class="ref"> -->
+
+    <img src="element/질문4_배경요소.svg" alt="배경요소" class="back_elm">
+    <img src="element/배경로고_밝.svg" alt="로고" class="logo">
+    <img src="element/입력 박스.svg" alt="입력" class="input">
+    <img src="element/손.svg" alt="손" class="hand">
+    <img src="element/동글.svg" alt="동글" class="circle">
+    <img src="element/지금 그 때를 떠올리면 어떤 감정, 생각이 떠오르나요_.svg" alt="질문4" class="text">
+    <img src="element/최대 500자.svg" alt="제한수" class="warning">
+    <img src="element/결과보기.svg" alt="결과" class="result">
+
+    <!-- 입력창 -->
+    <textarea id="answer_q3" class="input-a3" 
+        data-field="q3"
+        placeholder="사용자는 이곳에 작성을 합니다."
+        maxlength="500" 
+        spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+
+    <div class="btn">
+        <a href="qa_3.html">
+            <img src="element/위 화살표.svg" alt="이전 버튼" class="before-btn">
+        </a> 
+   
+        <a href="archive_detail.html" id="nextBtn">
+            <img src="element/아래 화살표.svg" alt="다음 버튼" class="next-btn">
+        </a> 
+    </div>
+    <!-- 경고창 -->
+    <div id="alertModal" class="alert-modal">
+    <div class="alert-box">
+        <p id="alertText">내용을 입력해주세요.</p>
+        <button id="closeAlert">X</button>
+    </div>
+
+    <!-- 로딩 오버레이 -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-box">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">당신의 기억으로 악보를 만드는 중이에요…</div>
+        </div>
+    </div>
+
+    <script src="qa.js"></script>
+
+
+    <script type="module">
+        // ===== 아카이브 노트 실시간 추가용 Firestore 설정 =====
+        const db = firebase.firestore();
+        const notesRef = db.collection('archiveNotes');
+        const MAX_PER_LINE = 8;
+
+        // line 안에서 x 위치 계산 (archive.html과 동일)
+        function calcX(order) {
+            const margin = 8;                        // 좌우 여백 %
+            const usable = 100 - margin * 2;
+            const slot = usable / (MAX_PER_LINE - 1);
+            const jitterRatio = 0.15;
+            const jitterRange = slot * jitterRatio;
+
+            const center = margin + slot * order;
+            const jitter = (Math.random() * 2 - 1) * jitterRange;
+            const x = Math.min(100 - margin, Math.max(margin, center + jitter));
+
+            return x + '%';
+        }
+
+        // y 위치는 약간 랜덤
+        function calcY() {
+            const min = 17;   // 최소 17%
+            const max = 90;   // 최대 90%
+            const y = min + Math.random() * (max - min);
+            return y + '%'; 
+        }
+
+        // qa_4에서 새로 생성된 songId를 archiveNotes에 추가
+        async function addSharedNote(entry) {
+            // entry: { songId, nickname, tag }
+
+            // 1) 현재까지 저장된 공유 노트 개수
+            const snap  = await notesRef.get();
+            const total = snap.size;  // 0,1,2,...
+
+            // 2) 줄/칸 계산
+            const lineIndex = Math.floor(total / MAX_PER_LINE); // 0,1,2...
+            const order     = total % MAX_PER_LINE;             // 0~7
+
+            // 3) 위치 계산
+            const x = calcX(order);
+            const y = calcY();
+
+            // 4) 노트 모양 인덱스 (NOTE_SVGS는 archive.html에만 있으니 개수 8개 기준)
+            const svgIndex = Math.floor(Math.random() * 8); // 0~7
+
+            // 5) Firestore에 저장
+            await notesRef.add({
+                songId:   entry.songId,
+                nickname: entry.nickname,
+                tag:      entry.tag,
+                lineIndex,
+                x,
+                y,
+                svgIndex,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
+
+        import { createMemory, analyzeMemory, generateMusic } from './api.js';
+        const nextBtn    = document.getElementById('nextBtn');
+        const alertModal = document.getElementById('alertModal');
+        const alertText  = document.getElementById('alertText');
+        const closeAlert = document.getElementById('closeAlert');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const openAlert  = (msg) => { alertText.innerHTML = msg; alertModal.style.display = 'flex'; };
+        closeAlert?.addEventListener('click', () => alertModal.style.display = 'none');
+        alertModal?.addEventListener('click', (e) => { if (e.target === alertModal) alertModal.style.display = 'none'; });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') alertModal.style.display = 'none'; });
+
+
+
+        // 이 페이지에 '무언가라도' 입력했는지(현재 DOM 기준)
+        function hasAnyInput() {
+            return Array.from(document.querySelectorAll('textarea, input[type="text"], input[type="email"], input[type="number"]'))
+                .some(el => (el.value || '').trim().length > 0);
+        }
+
+        // 값 수집: DOM(현재 타자값) → FormState → localStorage 순서
+        function pickAnswer(field, domSelectors, lsKeys) {
+            // 1) DOM에서 먼저 시도 (현재 페이지에 있으면 최신값)
+            for (const sel of domSelectors) {
+                const el = document.querySelector(sel);
+                if (el && typeof el.value === 'string') {
+                    const v = el.value.trim();
+                    if (v) return v;
+                }
+            }
+            // 2) FormState에서 시도 (자동 저장된 값)
+            if (window.FormState?.getState) {
+                const st = FormState.getState() || {};
+                if (st[field] && String(st[field]).trim() !== '') return String(st[field]).trim();
+            }
+            // 3) localStorage 백업 키에서 시도
+            for (const k of lsKeys) {
+                const v = (localStorage.getItem(k) || '').trim();
+                if (v) return v;
+            }
+            return '';
+        }
+
+        nextBtn.addEventListener('click', async (e) => {
+            e.preventDefault(); // 내가 제어
+
+            // 1) 검증: 이 페이지에서 아무것도 안 적었으면 막기(원하면 제거 가능)
+            if (!hasAnyInput()) {
+                openAlert('내용을 입력해주세요.');
+                return;
+            }
+
+            // userId는 qa_1에서 저장해둔 값 사용 (FormState 우선, 없으면 localStorage)
+            const st     = window.FormState?.getState ? (FormState.getState() || {}) : {};
+            const userId = st.userId || localStorage.getItem('userId');
+            if (!userId) {
+                openAlert('사용자 정보가 없습니다. 처음부터 다시 진행해 주세요.');
+                return;
+            }
+            // answer1~3 수집
+            // id 패턴: #answer_q1|2|3  / data-field: q1|q2|q3
+            const answer1 = pickAnswer('q1', ['#answer_q1', '[data-field="q1"]'], ['answer1','q1']);
+            const answer2 = pickAnswer('q2', ['#answer_q2', '[data-field="q2"]'], ['answer2','q2']);
+            const answer3 = pickAnswer('q3', ['#answer_q3', '[data-field="q3"]'], ['answer3','q3']);
+
+            // (선택) 세 문항 모두 비어있으면 막기
+            if (!answer1 && !answer2 && !answer3) {
+                openAlert('답변을 입력해주세요.');
+                return;
+            }
+            // 🔒 버튼 잠그고 로딩 ON
+            nextBtn.style.pointerEvents = 'none';
+            nextBtn.setAttribute('aria-disabled', 'true');
+            if (loadingOverlay) loadingOverlay.style.display = 'flex';
+
+            try {
+  nextBtn.style.pointerEvents = 'none';
+  nextBtn.setAttribute('aria-disabled', 'true');
+
+  const st = window.FormState?.getState ? (FormState.getState() || {}) : {};
+  const userId = st.userId || localStorage.getItem('userId');
+  if (!userId) throw new Error('userId missing in qa_4');
+
+  // 1) 🧩 memory 저장
+  const memResp = await createMemory(userId, { answer1, answer2, answer3 });
+  console.log('createMemory resp (raw):', memResp);
+
+  const memBody = memResp?.data ?? memResp;
+  const memoryId = memBody?.memoryId ?? memBody?.id;
+  if (!memoryId) {
+    console.error('memoryId not found in response:', memResp);
+    throw new Error('memoryId missing');
+  }
+
+  // 2) 🎧 memory 분석 → elementId, keywords 등
+  const analyzeResp = await analyzeMemory({ userId, memoryId });
+  console.log('analyzeMemory resp (raw):', analyzeResp);
+
+  const analyzeBody = analyzeResp?.data ?? analyzeResp;
+  const elementId   = analyzeBody?.elementId;
+  const keywords    = Array.isArray(analyzeBody?.keywords)
+                        ? analyzeBody.keywords
+                        : [];
+
+  if (!elementId) {
+    console.error('elementId not found in analyze response:', analyzeResp);
+    throw new Error('elementId missing');
+  }
+
+  // 3) 🎵 뮤직젠 → songId, midiUrl/wavUrl/svgUrl
+  const musicResp = await generateMusic({ elementId });
+  console.log('generateMusic resp (raw):', musicResp);
+
+  const musicBody = musicResp?.data ?? musicResp;
+  const songId    = musicBody?.songId;
+  const svgUrl    = musicBody?.svgUrl || '';
+
+  if (!songId) {
+    console.error('songId not found in music response:', musicResp);
+    throw new Error('songId missing');
+  }
+
+  // 4) 📌 아카이브 노트에 저장할 닉네임/태그 준비
+  const nickname =
+    musicBody.user?.nickName ||
+    memBody.user?.nickName ||
+    st.name ||
+    st.nickName ||
+    localStorage.getItem('userName') ||
+    '이름 없음';
+
+  const tag = keywords.length ? keywords.join(', ') : '';
+
+  // Firebase 오선지 노트에 추가 (이미 만들어 둔 함수라고 가정)
+  try {
+    await addSharedNote({ songId, nickname, tag });
+  } catch (e) {
+    console.error('archiveNotes 추가 실패(화면 진행은 계속):', e);
+  }
+
+  // 5) 🔄 다음 사용자 위해 폼/유저 정보 초기화
+  if (window.FormState?.clear) {
+    FormState.clear();
+  }
+  
+  // qa.js 안 쓰는 경우 대비: 개별 키들 제거
+  localStorage.removeItem('qaForm:v1');  // 통합 폼 상태 썼다면
+  localStorage.removeItem('userId');
+  localStorage.removeItem('userName');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('answer1');
+  localStorage.removeItem('answer2');
+  localStorage.removeItem('answer3');
+
+  // 6) ✨ 완성된 곡의 songId 로 디테일 페이지 이동
+  location.href = `archive_detail.html?songId=${encodeURIComponent(songId)}`;
+
+} catch (err) {
+  console.error(err);
+  openAlert('전송 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.');
+  nextBtn.style.pointerEvents = 'auto';
+  nextBtn.removeAttribute('aria-disabled');
+}
+});
+
+    </script>
+</body>
+</html>

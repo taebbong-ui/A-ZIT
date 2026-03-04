@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Archive</title>
+    <style>
+        @font-face {
+            font-family: 'KakaoBigSans';
+            src: url('element/archive_detail/fonts/kakao-big-sans/KakaoBigSans-Regular.ttf') format('opentype');
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GabiaNapjakBlock';
+            src: url('element/archive_detail/fonts/GabiaNapjakBlock/gabia_napjakBlock.otf') format('opentype'),
+                 url('element/archive_detail/fonts/GabiaNapjakBlock/gabia_napjakBlock.ttf') format('truetype');
+            font-style: normal;
+        }
+        body { 
+            display: flex;
+            margin: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .ref {
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */
+        }
+        
+        .back{
+            display: block;        /* img 기본 여백 제거 */
+            width: 100vw;            /* 화면 너비에 맞게 */
+            height: auto;
+            object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+            z-index: -1;             /* 다른 요소 뒤로 */     
+        }
+        .sub_elm {
+            position: absolute;
+            width: 90.2vw;
+            height: auto;
+            top: 50.5%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .ASCII {
+            position: absolute;
+            width: 26.15vw;
+            height: auto;
+            top: 31.2%;
+            left: 67.4%;
+            transform: translate(-50%, -50%);
+        }
+        .keybox {
+            position: absolute;
+            width: 39.55vw;
+            height: auto;
+            top: 46.4%;
+            left: 68%;
+            transform: translate(-50%, -50%);
+        }
+        .keyword-bar {
+            position: absolute;
+            width: 39.55vw;
+            height: 4vh;
+            top: 46.4%;
+            left: 68%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2vw;
+
+            font-family: sans-serif;
+            font-size: 0.9vw;
+            font-weight: 500;
+            color: #7C797C;
+            pointer-events: none;
+
+        }
+        /* 오르골 악보 */
+        .music-wrap {
+            position: absolute;
+            width: 45.15vw;
+            height: auto;
+            top: 66.35%;
+            left: 68.65%;
+            transform: translate(-50%, -50%);
+            aspect-ratio: 1000 / 520;
+
+        }
+        /* 바닥: 프레임 이미지 (래퍼 꽉 채우기) */
+        .musicbox {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+        .score-box {
+            position: absolute;
+            /* ⬇⬇ 오르골 박스 안쪽 흰 네모에 맞춰 미세 조정 */
+            top: 10%;
+            left: 3%;
+            right: 3%;
+            bottom: 5%;
+            overflow: hidden; 
+            display: grid;
+            place-items: center;
+        }
+        /* <img>로 악보 넣을 때 */
+        .score-box img,
+        .score-box svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        
+        .nickname {
+            position: absolute;
+            top: 14%;
+            left: 12%;
+            font-size: 3vw;
+            font-family: 'GabiaNapjakBlock';
+            color: #E6EDEA;
+        }
+
+        .content-card{
+            position: absolute;
+            left: 26.2%;
+            top: 54%;
+            transform: translate(-50%, -50%);
+            width: 32.2vw;                /* ← 프레임 가로 */
+            height: 67.8vh;               /* ← 프레임 세로 */
+            box-sizing: border-box;
+            /* overflow: hidden;            */
+            /* border: 1px solid red;      */
+        }
+
+        /* ===== 슬라이드: 같은 자리에서 겹쳐놓고 한 장만 보이게 ===== */
+        .content-item{
+            position: absolute;
+            inset: 0;                   /* 프레임에 딱 맞춤 */
+            display: grid;              
+            place-items: center;
+            opacity: 0;
+            pointer-events: none;       /* 안 보일 땐 클릭 막기 */
+            transition: opacity .35s ease;
+        }
+        .content-item.active{
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* 이미지가 슬롯(프레임)을 꽉 채우도록 */
+        .content-item > img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;          /* 전부 보이려면 contain 으로 변경 */
+            display: block;
+        }
+        /* === 추가: 화살표 버튼 === */
+        .content-card .slide-btn{
+            position: absolute;
+            bottom: 2%;
+            z-index: 2;                      /* 슬라이드 위에 올라오도록 */
+            width: 2vw;                    /* 필요 시 숫자 조절 */
+            height: 2.5vw;
+            font-family: 'KakaoBigSans';
+            font-size: 1.7vw;
+            font-weight: thin;
+            color: #E6EDEA;
+            background: transparent;
+            cursor: pointer;
+            border: none;
+            /* border: 1px solid red; */
+        }
+        /* 🔹 활성 버튼만 눌림 효과 적용 */
+        .content-card .slide-btn:not(:disabled):active {
+            transform: scale(1.1);
+        }
+
+        /* 🔹 비활성 버튼 스타일 */
+        .content-card .slide-btn:disabled {
+            cursor: default;          /* 클릭 커서 제거 */
+            pointer-events: none;     /* 클릭 불가 (JS 이벤트 포함 완전 차단) */
+        }
+        .content-card .slide-btn.prev { left: 3vw; }
+        .content-card .slide-btn.next { right: 3.5vw; }
+        .content-card:focus,
+        .content-card:focus-visible { outline: none; box-shadow: none; }
+
+        /*답변 관련*/
+        .content-card .answer { 
+            position: absolute;
+            z-index: 2;
+            top: 18%;
+            left: 13%;
+            right: 13%;
+            bottom: 10%;
+            font-family: 'KakaoBigSans';
+            font-size: 1vw;
+            line-height: 1.4;
+            color: #E6EDEA;
+            white-space: pre-line;       /* \n 보존 */
+
+            /* 🔥 추가 */
+            overflow-y: auto;   /* 세로 스크롤 */
+            overflow-x: hidden; /* 가로 스크롤은 숨김 (옵션) */
+            padding-right: 0.5vw; /* 스크롤바 때문에 글 잘리는 것 방지 */
+            /* 🔥 스크롤바 디자인 */
+            scrollbar-width: thin;          /* Firefox */
+            scrollbar-color: #ffffff33 transparent; /* Firefox */
+        }
+
+        .before-btn {
+            position: absolute;
+            width: 6.7vw;
+            height: auto;
+            top: 2.2%;                 
+            left: 6.6%;                   
+            transform: translateX(-50%);
+        }
+        .main-btn {
+            position: absolute;
+            width: 9.5vw;
+            height: auto;
+            bottom: 6%;                 
+            left: 92%;                   
+            transform: translateX(-50%);
+        }    
+        .before-btn:hover,
+        .main-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .more {
+            position: absolute;
+            width: 8vw;
+            height: auto;
+            top: 9%;
+            left: 15%;
+            transform: translate(-50%, -50%);
+        }
+
+        #download-btn {
+            position: absolute;
+            width: 22.85vw;
+            height: auto;
+            bottom: 8.95%;                 
+            left: 68.5%;                   
+            transform: translateX(-50%);
+            cursor: pointer;
+            transition: transform 0.2s ease; /* 부드럽게 */
+        }
+        #download-btn:active {
+            transform: translateX(-50%) scale(1.1);
+        }
+    </style>
+
+        <!-- 1. Firebase SDK 불러오기 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+      // 2. Firebase 초기화 (★ config는 콘솔에서 복붙) 
+      const firebaseConfig = {
+        apiKey: "AIzaSyCQvpzaVBrkdy6ZFe9BAgRpOwNAjTYL6Zo",
+        authDomain: "a-zit-2ca71.firebaseapp.com",
+        projectId: "a-zit-2ca71",
+        storageBucket: "a-zit-2ca71.firebasestorage.app",
+        messagingSenderId: "908182478309",
+        appId: "1:908182478309:web:f0e494ad1cb50a1053230c"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();  // ← 이걸로 어디서든 Firestore 쓸 수 있음
+    </script>
+
+</head>
+<body>
+    <!-- <img src="element/archive_detail/아카이빙 개인페이지.png" alt="래퍼" class="ref"> -->
+    <img src="element/archive_detail/개별 아카이빙 배경.svg" alt="배경" class="back">
+    
+    <img src="element/archive_detail/핑크디자인요소들.svg" alt="부가요소" class="sub_elm">
+    <img src="element/archive_detail/아스키.svg" alt="아스키" class="ASCII">
+    <img src="element/archive_detail/키워드박스.svg" alt="키워드박스" class="keybox">
+    <img src="element/archive_detail/더 구경하기.svg" alt="구경" class="more">
+    <div class="keyword-bar" id="keywordBar"></div>
+    <!-- 악보 박스 래퍼 -->
+    <div class="music-wrap">
+        <img src="element/archive_detail/오르골 악보 박스.svg" alt="오르골박스" class="musicbox">
+        <!-- 위: 실제 악보가 들어갈 캔버스 -->
+        <div id="scoreBox" class="score-box" aria-label="완성 악보"></div>
+    </div>
+
+
+    <div class="btn">
+        <a href="archive.html">
+            <img src="element/archive_detail/이전 버튼.svg" alt="이전 버튼" class="before-btn">
+        </a>
+        <a href="index.html">
+            <img src="element/archive_detail/메인 돌아가기 버튼.svg" alt="메인 버튼" class="main-btn">
+        </a>
+    </div>
+    <img src="element/archive_detail/개개인페이지.svg" id="download-btn" alt="오르골 악보 내려받기">
+
+
+    <div class="nickname" id="nickname"></div>
+    <div class="content-card" id="card">
+        <div class="content-item s1 active">
+            <img src="element/archive_detail/질문1_박스.svg" alt="1번째">
+            <div class="answer a0"></div>
+        </div>
+
+        <div class="content-item s2">
+            <img src="element/archive_detail/질문2_박스.svg" alt="2번째">
+            <div class="answer a1"></div>
+        </div>
+
+        <div class="content-item s3">
+            <img src="element/archive_detail/질문3_박스.svg" alt="3번째">
+            <div class="answer a2"></div>
+        </div>
+        <!-- 화살표(카드 내부 전용) -->
+        <button class="slide-btn prev" type="button" aria-label="이전">◁</button>
+        <button class="slide-btn next" type="button" aria-label="다음">▶</button>
+    </div>
+
+    <script>
+    (() => {
+        // 가짜 DB
+        const mockEntries = [
+        {
+            id: 1,
+            nickname: "J",
+            tag: "childhood, nature, hideout, friendship",
+            q0: "초등학교 4학년 때의 기억이에요.",
+            q1: "어릴 적 저는 자연을 누비는 걸 좋아했어요. 그리고 저만의 공간이 생기는 것을 좋아했죠. 저희 아파트 단지에는 나무가 굉장히 많았어요. 4학년 때 단지 깊숙한 곳에 나뭇가지들을 잘라서 모아두는 곳이 있는데, 거기다가 친구와 함께 작은 아지트를 만들었어요.\n\n나무가 움막처럼 자란 곳에 잘린 통나무를 가지고 벽을 세우고 나무로 의자를 만들었어요. 맨날 수업이 끝나면 거기로 가서 친구랑 놀았어요.",
+            q2: "우리만의 비밀 공간이 생긴 것 같아서 행복했거든요.",
+            musicSrc: "element/J.svg"
+        },
+        {
+            id: 2,
+            nickname: "T",
+            tag: "childhood memories, fruit picking, school activities, musical education",
+            q0: "초, 중학교 때 기억입니다.",
+            q1: "저희 아파트 단지에 매화나무랑 오과나무가 많았거든요. 그래서 애들이랑 나무 타고 열매를 다 따러 다녔어요. 아빠가 퇴근하다가 제 모습을 보고 기억했던 재밌는 일화도 있답니다. 그 때 외할머니랑 같이 살았는데, 할머니께서 제가 따 온 열매들로 청을 담다가 지치셔서 그만 좀 가져오라고 하셨어요.\n\n아 그리고 저는 촌 학교를 다녀서 학교에 지원이 엄청 들어왔어요. 그래서 저희 학교는 특이하게, 중학교인데도 불구하고 일주일에 5일이 거의 다 7교시였어요. 음악과 지원비가 넘쳐나서 저희를 강제로 학교에 묶어두고 이것저것 많이 가르쳐주셨거든요. 전 그 때 합창, 악기 이런 걸 배웠던 것 같은데, 지금 생각해보면 연극이나 밴드 악기 배우는 친구들을 뒤로 한 채 혼자 저 수업 들으러 간 게 웃겨요.",
+            q2: "어쩌면 풍연을 하게 될 운명이었을지도.",
+            musicSrc: "element/T.svg"
+        },
+        {
+            id: 3,
+            nickname: "S",
+            tag: "수능 준비, 친구들, 방송부, 고3 담임, 모터보트",
+            q0: "수능 두 달 전의 기억이에요.",
+            q1: "수능을 준비했던 저랑 친구들은 점점 미쳐가고 수시가 끝난 친구들은 공부 안 하고 교실에서 다 휴대폰만 하고.. 너무 집중이 안 돼서 수능 자습실을 만들어달라고 요청했는데 그건 또 안 된다 하셨어요. 그래서 애라 모르겠다 하고 친구들한테 “그냥 야 우리 조퇴하자!” 했어요. 제 고3 담임쌤이 제가 방송부 하면서 고등학교 3년 내내 함께했던 쌤이셨거든요. 저희랑 친하기도 했고 워낙에 자유로우신데다가 학생들을 막 풀어놓는 분이셨어서, 조퇴 시켜달라니까 (떨떠름;;) 하시더니 바로 조퇴증에 싸인을 해 주셨어요. 저희는 택시를 타고 엄청 큰 호수에 갔어요. 그리고 나니까… 어라 저기 모터보트가…? 바로 모터보트를 타게 됐습니다. 사장님께서 저희가 고3이라는 걸 듣고 엄청 길게 태워주셨어요. 심지어는 돈도 더 적게 받으셨답니다.",
+            q2: "정말 행복했어요. 운좋게 마음껏 소리지르고 즐기다가 왔던 기억이 있네요.",
+            musicSrc: "element/S.svg"
+        },
+        {
+            id: 4,
+            nickname: "영",
+            tag: "childhood, bicycle, nature, stars, creativity",
+            q0: "10살부터 15살까지,\n사춘기가 오지 않았던 천진난만한 소년기의 기억입니다.",
+            q1: "일과가 끝나면 집 앞에 있는 공원에서 자전거를 탔어요. 살랑이는 바람에 몸을 맡기고, 날아갔어요. 매일 coldplay나 ed sheeran의 노래를 재생하고, 구름을 쫓아다녔어요. 어떤 때는 이유 없이 빠르게 가고 싶어 페달을 세게 밟기도 하고, 언덕을 내려갈 때는 미소를 걸고 살아있음을 느꼈던 것 같아요. 그냥 자전거 타는 게 좋아서, 매일 똑같은 길을 반복했어요.\n항상 노을이 질 때 집으로 돌아왔는데, 그때의 태양과 구름이 겹치며 만들어졌던 주황, 파랑이 물감을 푼 것 같았어요.\n\n시골에서 자란 터라, 밤이 되면 스케치북이랑 물감을 들고 마당에 가 앉았어요. 별이 좋았거든요. 당시 책 읽는 걸 좋아했는데, 나만의 책을 만들고 싶어서 노란색 물감으로 별을 스케치북에 그렸어요.\n제 집에서 보이는 별은 모두 그려서, 서로 연결했어요. ",
+            q2: "저 멀리 있는 별이랑 내가 이어져 있는 느낌이 좋았던 것 같아요.",
+            musicSrc: "element/영.svg"
+        },
+        {
+            id: 5,
+            nickname: "해찬",
+            tag: "초등학교, 티볼, 홈런, 우승, 교통사고, 실패, 아쉬움, 추억",
+            q0: "6학년이었으니 아주 오래 전 일이지만, 아직까지 제대로 기억하고 있어요.",
+            q1: "초등학교 때 티볼을 했어요. 그 때의 전 작았는데, 홈런도 몇 번 쳤어요. 아무도 예상하지 못했던 4번타자였던거죠. 저도 그렇고 우리 학교 팀도 그렇게 잘 잘했어요. 우리 구에서 1등을 했거든요. 그렇게 자신감이 하늘을 찌를 때, 우리 구를 대표해서 서울시 대회에 나가게 되었어요. ‘무조건 1등하겠다.’ 라는 마음가짐으로 버스를 빌려서 대회에 가는데, 교통사고가 났어요. 크게 다치지는 않았는데, 그러고 바로 허망하게 대회가 탈락했던 기억이 나네요. 사고와는 관계없이 상대팀이 잘했던 것이었겠지만요, 아쉬움을 뒤로 하고 버스에서 훌쩍이며 집에 갔던 것이 아직까지도 추억으로 남아있어요.",
+            q2: "참 소중하고 애틋한 것 같아요. 행복하기도 했고요. 그 때의 즐거움, 소중한 기억들이 모여 현재의 내가 되지 않았을까 싶네요.",
+            musicSrc: "element/해찬.svg"
+        },
+        {
+            id: 6,
+            nickname: "은성",
+            tag:  "초등학생, 토요일, 오토바이, 신나는 추억",
+            q0: "초등학교 2학년때의 기억입니다.",
+            q1: "어느 토요일이었어요. ‘놀토’라는 개념이 있던 시절이라 격주에 한 번은 토요일에 학교를 갔어요. 그 토요일도 학교가 끝나고 집에 가려던 참이었고, 친한 동생을 데리러 동생의 아버지께서 오토바이를 타고 오셨어요. 어렸을 때에는 ‘오토바이 = 폭주족’이라는 편견이 있어서 무섭게만 생각했는데, 막상 보니 재밌어 보였어요. 그 마음이 얼굴에 다 비쳤는지 친구 아버지가 같이 탈거냐고 물어봐주셨어요. 바로 알겠다고 대답한 후 셋이 오토바이를 타고 하교했던 기억이 나네요. 그 짧은 비탈길을 오토바이를 타고 내려오던 어린 날의 신나는 기억이 아직도 생생해요.",
+            q2: "선선한 바람이 불고 사람도 많이 없는 조용한 토요일의 분위기에 오토바이를 처음 탔을 때의 설렘과 즐거움이 더해지니 상쾌한 감정이 떠오르는 것 같아요. 다시는 돌아갈 수 없는 순수했던 시절이에요.",
+            musicSrc: "element/은성.svg"
+        
+        },
+        {
+            id: 7,
+            nickname: "혜원",
+            tag: "childhood, rainy day, playing, family, nostalgia",
+            q0: "정확하게 기억은 안나는데 아마 7살 아니면 8살이었을거에요.",
+            q1: "그때 제가 다니던 피아노 학원 뒤에 놀이터가 있었어요. 그리고 저희 집은 놀이터 뒤쪽에 있었습니다. 어느 토요일, 비가 내리던 날이었어요. 그날 엄마랑 언니랑 같이 피아노 학원에 갔다가 돌아오는 길이었어요. 제가 비를 맞으면서 뛰어다니기 시작했는데, 언니도 재밌어보였는지 같이 비를 맞으면서 뛰었어요. 엄마가 저희를 지켜보고 계셨는지 아니면 같이 비를 맞았는지 정확하게는 기억이 안나지만, 확실하게 언니랑은 비를 쫄딱 맞으면서 놀이터에서 재밌게 놀았었어요. 집에 와서는 엄마가 따뜻한 물로 씻겨주시고, 따뜻한 코코아를 주셨는데 아주 달콤해서 기분 좋았답니다.",
+            q2: "지금 다시 그때를 생각해보자면.. 비 맞으면서 뛰어다닌게 몇 년 전인지 모르겠네요. 요즘은 그러고 싶어도 쉽게 그러지 못하는게 싫어요. 함께 비 맞으면서 놀 친구가 필요해요.\n지금 그러고 놀기엔 용기가 없어서요 (ㅋㅋ)\n아무 걱정도 없던 때가 그립네요.",
+            musicSrc: "element/혜원.svg"
+        },
+        {
+            id: 8,
+            nickname: "민",
+            tag: "friend, waiting, boredom, mischief, nostalgia",
+            q0: "중2 때의 기억입니다.",
+            q1: "제 친구 두 명이 저 빼고 배드민턴 방과후를 신청해버렸어요. 저는 그렇게 혼자 집에 걸어가야 하는 학생이 되어버렸습니다. 하지만 그 당시 저는 죽어도 혼자 하교 하기를 싫어했고, 심지어 아무것도 할 게 없는 한량한 학생이었습니다. 저에게 친구들을 기다려서 같이 간다는 선택지 뿐이었어요. 그래서 기다렸습니다. 매번, 약 1시간 반을, 모두가 떠나버린 반 안에서, 혼자 덩그러니 남겨져…. 정말 별의별 짓을 다 했습니다. 어느 정도냐면, 교실의 맨 뒤 남는 공간에서 에어컨 키고 낮잠을 자다가, 지나가시던 경비원님이 절 보고 놀라서 담임 선생님을 호출한 적도 있습니다. 한 학기 내내 기다렸던 기억이 계속 남아있습니다.",
+            q2: "사실은 재밌었어요. 다시 하고 싶고 다시 돌아가고 싶어요. 아무것도 모르던, 교실에서 친구를 기다리는 것만으로도 재밌어하던 그 시절로 돌아가고 싶어요. 그때만 할 수 있는 선택지일수도…",
+            musicSrc: "element/민.svg"
+        }
+    ];
+
+ // ===== 1. 공통 DOM 캐시 & 함수들 =====
+  const card    = document.getElementById('card');
+  const slides  = Array.from(card.querySelectorAll('.content-item'));
+  const prevBtn = card.querySelector('.slide-btn.prev');
+  const nextBtn = card.querySelector('.slide-btn.next');
+  const nicknameEl = document.getElementById('nickname');
+  const scoreBox   = document.getElementById('scoreBox');
+  const keywordBar = document.getElementById('keywordBar');
+  const downloadBtn = document.getElementById('download-btn');
+
+  let i = Math.max(0, slides.findIndex(el => el.classList.contains('active')));
+
+  function clamp(n, min, max){ return Math.min(max, Math.max(min, n)); }
+
+  function updateNav(){
+    const atFirst = i === 0;
+    const atLast  = i === slides.length - 1;
+
+    prevBtn.disabled = atFirst;
+    nextBtn.disabled = atLast;
+
+    prevBtn.textContent = atFirst ? '◁' : '◀';
+    nextBtn.textContent = atLast  ? '▷' : '▶';
+
+    prevBtn.setAttribute('aria-disabled', String(atFirst));
+    nextBtn.setAttribute('aria-disabled', String(atLast));
+  }
+
+  function show(n){
+    i = clamp(n, 0, slides.length - 1);
+    slides.forEach((el, idx) => el.classList.toggle('active', idx === i));
+    updateNav();
+  }
+
+  prevBtn.addEventListener('click', () => { if (!prevBtn.disabled) show(i - 1); });
+  nextBtn.addEventListener('click', () => { if (!nextBtn.disabled) show(i + 1); });
+  card.tabIndex = 0;
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft'  && !prevBtn.disabled) show(i - 1);
+    if (e.key === 'ArrowRight' && !nextBtn.disabled) show(i + 1);
+  });
+
+  // 키워드 문자열 → 해시태그 span들
+  function renderKeywords(tagStr){
+    if (!keywordBar) return;
+    const tokens = String(tagStr || '')
+      .split(/[,，]/)
+      .map(s => s.trim())
+      .filter(Boolean)
+      .map(s => s.replace(/^#/, ''))
+      .slice(0, 6);
+
+    keywordBar.innerHTML = tokens.map(t => `<span>#${t}</span>`).join(' ');
+  }
+
+  // 악보 이미지 렌더
+  function renderScore(src){
+    if (!scoreBox) return;
+    scoreBox.replaceChildren();
+    if (!src) return;
+    const img = new Image();
+    img.src = src;
+    img.alt = '완성 악보';
+    scoreBox.appendChild(img);
+  }
+
+  // 실제로 페이지에 내용을 넣는 함수(공통)
+  function initDetail(entry){
+    if (!entry) {
+      alert('entry 없음');
+      return;
+    }
+
+    // 닉네임
+    nicknameEl.textContent = entry.nickname || '';
+
+    // 답변
+    card.querySelector('.a0').textContent = entry.q0 || '';
+    card.querySelector('.a1').textContent = entry.q1 || '';
+    card.querySelector('.a2').textContent = entry.q2 || '';
+
+    // 악보
+    renderScore(entry.musicSrc);
+
+    // 키워드
+    renderKeywords(entry.tag);
+
+    // 슬라이드 내비 초기화
+    show(i);
+
+    // 다운로드 버튼 세팅
+    setupDownload(entry);
+  }
+
+  function saveBlobAs(blob, filename = 'score.svg') {
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function setupDownload(entry){
+  downloadBtn.style.cursor = 'pointer';
+  downloadBtn.setAttribute('role', 'button');
+  downloadBtn.setAttribute('aria-label', '오르골 악보 내려받기'); 
+  downloadBtn.tabIndex = 0;
+
+  downloadBtn.onclick = () => {
+    console.log('Download started');
+
+    const nickname = (entry.nickname || 'Unknown').replace(/\s+/g, '');
+    const filename = `AZIT_${nickname}_오르골 악보.svg`;
+
+    // musicSrc가 없는 경우
+    if (!entry.musicSrc) {
+      console.warn('musicSrc 없음 → 다운로드 불가');
+      return;
+    }
+
+    const src = entry.musicSrc;
+
+    // pre-signed URL (http/https) → 그냥 그리로 이동
+    if (/^https?:\/\//.test(src)) {
+      window.location.href = src;
+      return;
+    }
+
+    // mock용 로컬 파일 (element/...) → 강제 다운로드 시도
+    const a = document.createElement('a');
+    a.href = src;
+    a.download = filename; // 여기서 네가 원하는 이름으로 저장
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    console.log('Download finished (from local mock file)');
+  };
+}
+
+  // ===== 2. URL 파라미터 해석 =====
+  const params = new URLSearchParams(location.search);
+  const idFromMock  = params.get("id");      // 첫 줄(프론트 mock 용)
+  const songIdParam = params.get("songId");  // 둘째 줄 이후(Firebase 용)
+
+  // --- 2-1. 첫 줄: mockEntries에서만 찾기 ---
+  if (idFromMock && !songIdParam) {
+    const entry = mockEntries.find(e => String(e.id) === String(idFromMock));
+    if (!entry) {
+      alert("mockEntries에서 해당 id를 찾지 못했어요");
+      return;
+    }
+    initDetail(entry);   // ✅ 첫 줄은 무조건 여기서 끝
+    return;
+  }
+
+    // --- 2-2. 둘째 줄 이후: Firebase + 백엔드에서 가져오기 ---
+  if (!songIdParam) {
+    alert("songId가 없습니다");
+    return;
+  }
+
+  const db = firebase.firestore();
+  const songIdNum = Number(songIdParam);
+  const BASE_URL = 'https://azit2025.duckdns.org';
+
+  (async () => {
+    try {
+      // 1) Firebase archiveNotes에서 songId에 해당하는 노트 정보(닉네임, 태그) 가져오기
+      let nicknameFromNote = '';
+      let tagFromNote = '';
+
+      const noteSnap = await db.collection('archiveNotes')
+        .where('songId', '==', songIdNum)
+        .limit(1)
+        .get();
+
+      if (!noteSnap.empty) {
+        const note = noteSnap.docs[0].data(); // { songId, nickname, tag, ... }
+        nicknameFromNote = note.nickname || '';
+        tagFromNote = note.tag || '';
+      }
+
+      // 2) 백엔드 /achive/{songId}에서 상세 정보 가져오기
+      const resp = await fetch(`${BASE_URL}/archive/${encodeURIComponent(songIdNum)}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!resp.ok) {
+        console.error('❌ /archive/{songId} 응답 에러', resp.status);
+        alert('상세 데이터를 불러오는 데 실패했어요');
+        return;
+      }
+
+      const raw = await resp.json();
+      console.log('archive raw response =', raw);
+      const detail = raw.data ?? raw;  // data가 있으면 data, 없으면 raw 그대로 사용
+    
+      // detail 예시:
+      // {
+      //   "songId": 1,
+      //   "user": { "userId": 1, "nickName": "SunnyKid" },
+      //   "memory": { "answer1": "...", "answer2": "...", "answer3": "..." },
+      //   "svgUrl": "https://..."
+      // }
+
+      const entry = {
+        id: detail.songId,
+        nickname: nicknameFromNote || (detail.user && detail.user.nickName) || '',
+        tag: tagFromNote,   // Firebase 태그 우선 사용
+        q0: detail.memory?.answer1 || '',
+        q1: detail.memory?.answer2 || '',
+        q2: detail.memory?.answer3 || '',
+        musicSrc: detail.svgUrl
+      };
+
+      initDetail(entry);   // ✅ 이걸로 화면에 채우기
+    } catch (err) {
+      console.error(err);
+      alert('데이터 로딩 중 오류가 발생했습니다');
+    }
+  })();
+})();
+</script>
+    
+</body>
+</html>

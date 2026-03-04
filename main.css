@@ -1,0 +1,177 @@
+body {
+  display: flex;
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+
+  overflow-x: hidden;
+  position: relative;
+}
+
+.intro {
+  display: block;
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+
+  overflow-x: hidden;
+  position: relative;
+}
+.back {
+  width: 100vw;            /* 화면 너비에 맞게 */
+  height: 100%;
+  object-fit: cover;       /* 비율 유지하며 꽉 채움 */
+  z-index: -1;             /* 다른 요소 뒤로 */
+}
+
+.gradient {
+  position: absolute;
+  width: 100vw;
+  height: auto;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;  /* .back보다 위, 다른 요소보다 아래 */
+}
+
+
+.backlogo {
+  position: absolute;
+  width: 6.6vw;
+  height: auto;
+  top: 5.55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sub {
+  position: absolute;
+  width: 68.5vw;
+  height: auto;
+  top: 5.6%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.star {
+  position: absolute;
+  width: 34.7vw;
+  height: auto;
+  top: 19.9%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.azit {
+  position: absolute;
+  width: 68vw;
+  height: auto;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.img1 {
+  position: absolute;
+  width: 15.7vw;
+  height: auto;
+  top: 58.08%;
+  left: 30.5%;
+  transform: translate(-50%, -50%);
+}
+
+.img2 {
+  position: absolute;
+  width: 17.4vw;
+  height: auto;
+  top: 57.7%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.img3 {
+  position: absolute;
+  width: 15.7vw;
+  height: auto;
+  top: 58.08%;
+  left: 71.3%;
+  transform: translate(-50%, -50%);
+}
+
+.txt1 {
+  position: absolute;
+  width: 33.5vw;
+  height: auto;
+  top: 10.9%;
+  left: 49.9%;
+  transform: translate(-50%, -50%);
+}
+.txt2 {
+  position: absolute;
+  width: 39.1vw;
+  height: auto;
+  bottom: 9.3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* hover 시 살짝 커지는 효과 */
+.btn {
+  cursor: pointer;             /* 마우스 올리면 손가락 커서 */
+  transition: transform 0.3s ease; /* hover 시 부드러운 효과 */
+}
+
+.arc {
+  position: absolute;
+  width: 21vw;
+  height: auto;
+  bottom: 1.8%;
+  left: 33%;
+  transform: translate(-50%, -50%);
+}
+
+.q_a {
+  position: absolute;
+  width: 21vw;
+  height: auto;
+  bottom: 1.8%;
+  left: 67%;
+  transform: translate(-50%, -50%);
+}
+
+.arc:hover,
+.q_a:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* ===== Global Scrollbar Style (메인 페이지 전체) ===== */
+
+/* Chrome / Edge / Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 10px;                         /* 폭 조금 넉넉하게 */
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);     /* 아주 옅은 회색 (트랙) */
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: rgba(109, 96, 107, 0.55); /* 진한 회보라 계열 */
+    border-radius: 999px;                 /* 동글동글 */
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(109, 96, 107, 0.8);  /* hover 시 더 진하게 */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(109, 96, 107, 0.55) rgba(0,0,0,0.03);
+}
+
+
